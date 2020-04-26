@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ImageSlider.Controllers
 {
-    [Route("api/[controlere]")]
+    [Route("api/[controller]")]
     public class GalleryController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
