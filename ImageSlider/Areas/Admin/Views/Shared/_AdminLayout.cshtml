@@ -1,6 +1,7 @@
 ﻿<!DOCTYPE html>
 
 <html>
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
@@ -30,7 +31,7 @@
         <!-- Sidebar  -->
         <nav id="sidebar" class="navbar-light bg-white topbar mb-4 static-top shadow">
             <div class="sidebar-header bg-white ">
-                <h3 class="brand"  >LearningLand<sup>.com</sup></h3>
+                <h3 class="brand">LearningLand<sup>.com</sup></h3>
                 <strong class="brand">TH</strong>
             </div>
 
@@ -45,11 +46,12 @@
                 <hr class="sidebar-divider">
 
                 <li>
+
                     <a href="#pcaSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-images"></i>
                         PCA
                     </a>
-                    <ul class="collapse list-unstyled" id="pcaSubmenu">
+                    <ul class="collapse" id="pcaSubmenu">
                         <div class="innerList">
                             <li>
                                 <a asp-controller="FeaturedSlider" asp-action="Index">Featured Slider</a>
@@ -232,17 +234,18 @@
                 @RenderBody()
 
             </div>
-            <footer class="container-fluid fixed-bottom">
-                <div class="copyright text-center my-auto">
-                    <span class="footerTextColor"> Admin Panel Created By LearningLand <sup>&copy;</sup>2019</span>
-                </div>
-            </footer>
+
 
         </div>
 
 
     </div>
 
+    <footer class="container-fluid fixed-bottom">
+        <div class="copyright text-center my-auto">
+            <span class="footerTextColor"> Admin Panel Created By LearningLand <sup>&copy;</sup>2019</span>
+        </div>
+    </footer>
 
     <environment include="Development">
         <script src="~/lib/jquery/jquery.min.js"></script>

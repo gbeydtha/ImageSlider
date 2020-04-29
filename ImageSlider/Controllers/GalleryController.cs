@@ -96,6 +96,7 @@ namespace ImageSlider.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> CreateNewGallery(Gallery gallery, IFormCollection formData)
         {
+
             int i = 0;
             string GalleryTitle = formData["GalleryTitle"];
             string GalleryType = formData["GalleryType"];
@@ -109,49 +110,50 @@ namespace ImageSlider.Controllers
             string GalleryPath = Path.Combine(_environment.WebRootPath + $"{Path.DirectorySeparatorChar}uploads{Path.DirectorySeparatorChar}Gallery{Path.DirectorySeparatorChar}", id.ToString());
 
             // Path of Gallery to store in Db. No neeed full Path (Without root path)
-            string dbImageGalleryPath = Path.Combine($"{Path.DirectorySeparatorChar}uploads{Path.DirectorySeparatorChar}Gallery{Path.DirectorySeparatorChar}", id.ToString()); 
+            string dbImageGalleryPath = Path.Combine($"{Path.DirectorySeparatorChar}uploads{Path.DirectorySeparatorChar}Gallery{Path.DirectorySeparatorChar}", id.ToString());
 
             //Create The Directory/Folder ion the Sercer to store New Gallery Image
-            CreateDirectory(GalleryPath); 
-            
+            CreateDirectory(GalleryPath);
+
             // get all uploaded  Files and files details
 
-            foreach(var file in formData.Files)
+            foreach (var file in formData.Files)
             {
-                if(file.Length > 0)
+                if (file.Length > 0)
                 {
                     var extension = Path.GetExtension(file.FileName);
                     //  time to add in  FileName
+
                     var fileName = DateTime.Now.ToString("yymmssfff");
 
                     //Create  the File Path 
                     var path = Path.Combine(GalleryPath, fileName) + extension;
 
                     // Path of Image that will be stored in database - No need to add the full path
-                    var dbImagePath = Path.Combine(dbImageGalleryPath+ $"{Path.DirectorySeparatorChar}", fileName) + extension;
+                    var dbImagePath = Path.Combine(dbImageGalleryPath + $"{Path.DirectorySeparatorChar}", fileName) + extension;
 
                     string ImageCaption = formData["ImageCaption[]"][i];
                     string ImageDescription = formData["ImageDescription[]"][i];
                     string AlternateText = formData["ImageAlt[]"][i];
 
-                    GalleryImage gImage = new GalleryImage();
-                    gImage.ImageId = id;
-                    gImage.ImageUrl = dbImagePath;
-                    gImage.Description = ImageDescription;
-                    gImage.AlternateText = AlternateText;
-                    gImage.Caption = ImageCaption;
-                   
-                    // Add images details o Images Table
-                   await  _dbContext.GalleryImages.AddAsync(gImage);
+                    GalleryImage Image = new GalleryImage();
+                    Image.GalleryId = id;
+                    Image.ImageUrl = dbImagePath;
+                    Image.Description = ImageDescription;
+                    Image.AlternateText = AlternateText;
+                    Image.Caption = ImageCaption;
 
-                    //Copy the uploaded images to server - Uploads folder
-                    //Using - Once file is copied then we will close the stream
+                    // Add images details o Images Table
+                    await _dbContext.GalleryImages.AddAsync(Image);
+
+                    // Copy the uploaded images to server - Uploads folder
+                    // Using - Once file is copied then we will close the stream
                     using (var stream = new FileStream(path, FileMode.Create))
                     {
                         await file.CopyToAsync(stream);
                     }
 
-                    i = i + 1; 
+                    i = i + 1;
                 }
             }
 
@@ -164,11 +166,11 @@ namespace ImageSlider.Controllers
 
             await _dbContext.SaveChangesAsync();
 
-             return Ok(new JsonResult("Successfully Added : " + GalleryTitle));
-            
+            return Ok(new JsonResult("Successfully Added : " + GalleryTitle));
+
         }
 
-        // Create  the new Gallery
+        // Create  the new Gallery CreateGalleryID
         private async Task<int> CreateGalleryId(Gallery gallery)
         {
             DateTime CreatedTime = DateTime.Now;
