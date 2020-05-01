@@ -5,6 +5,42 @@ $(function () {
 
 });
 
+// Code for Tabulator Table
+var table = new Tabulator("#LoadGalleryTable", {
+
+    height: 800px,
+    layout: "fitColumns",
+    paginationSize: 20,
+    placeholder: "No dataset",
+    columns: [
+        { title: "Id", field: "galleryId", sorter: "number", width: 10 },
+        { title: "Title", field: "title", sorter: "string" },
+        { title: "Active", field: "isActive", align: "center", formatter: "tickCross", sorter: "boolean" },
+        { title: "Featured", field: "isFeatured", align: "center", formatter: "tickCross", sorter: "boolean" },
+        { title: "Created", field: "timeCreated", align: "center", sorter: "date", formatter: function (cell) {
+                var convertTime = new Date(cell.getValue()).toUTCString(); 
+                return convertTime;
+        }},
+        { title: "Updated", field: "lastUpdated", align: "center",  sorter: "date", formatter: function (cell) {
+            var convertTime = new Date(cell.getValue()).toUTCString();
+            return convertTime;
+        }},
+        { title: "UserName", field: "username", sorter: "string", align: "center" },
+        { title: "Type", field: "galleryType", sorter: "string", align: "center" },
+        {
+            title: "Actions", sortable: false, align: "center", formatter: function (cell) {
+                var galId = cell.getData().galleryId;
+                var galTitle = cell.getData().title;
+                var active = cell.getData().isActive;
+                var featured = cell.getData().isFeatured;
+                var created = cell.getData().timeCreated;
+                var lastupdated = cell.getData().lastUpdated;
+                var username = cell.getData().username;
+                var gallerytype = cell.getData().galleryType;
+
+            }},
+    ]
+}); 
 
 // required Properties 
 
