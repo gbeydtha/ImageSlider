@@ -79,6 +79,7 @@ namespace ImageSlider.Controllers
                              Gallery_Title =g.Title,
                              Gallery_Path = g.GalleryUrl,
                              Image_Id = i.ImageId,
+                             Image_Title = i.ImageTitle,
                              Image_Path = i.ImageUrl,
                              Image_Caption = i.Caption,
                              Image_Description = i.Description,
@@ -131,13 +132,14 @@ namespace ImageSlider.Controllers
 
                     // Path of Image that will be stored in database - No need to add the full path
                     var dbImagePath = Path.Combine(dbImageGalleryPath + $"{Path.DirectorySeparatorChar}", fileName) + extension;
-
+                    string ImageTitle = formData["ImageTitle[]"][i];
                     string ImageCaption = formData["ImageCaption[]"][i];
                     string ImageDescription = formData["ImageDescription[]"][i];
                     string AlternateText = formData["ImageAlt[]"][i];
 
                     GalleryImage Image = new GalleryImage();
                     Image.GalleryId = id;
+                    Image.ImageTitle = ImageTitle; 
                     Image.ImageUrl = dbImagePath;
                     Image.Description = ImageDescription;
                     Image.AlternateText = AlternateText;
@@ -326,10 +328,13 @@ namespace ImageSlider.Controllers
                 foreach (var imgcap in formData["imageCaption[]"])
                 {
                     string ImageIdCap = formData["imageId[]"][j];
+                    string imageTitle = formData["imageTitle[]"][j];
                     string Caption = formData["imageCaption[]"][j];
                     string Description = formData["description[]"][j];
                     string AltText = formData["altText[]"][j];
+
                     var updateImageDetails = _dbContext.GalleryImages.FirstOrDefault(o => o.ImageId == Convert.ToInt32(ImageIdCap));
+                    updateImageDetails.ImageTitle = imageTitle; 
                     updateImageDetails.Caption = Caption;
                     updateImageDetails.Description = Description;
                     updateImageDetails.AlternateText = AltText;

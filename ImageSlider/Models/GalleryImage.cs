@@ -10,6 +10,7 @@ namespace ImageSlider.Models
     {
         [Key]
         public int ImageId { get; set; }
+        public string ImageTitle { get; set; }
         public string ImageUrl { get; set; }
         public string Caption { get; set; }
         public int GalleryId { get; set; }

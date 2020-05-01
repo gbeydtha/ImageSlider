@@ -125,7 +125,7 @@ function BuildImageTableRow(image) {
         "</button>" +
         "</div>" +
         "</td>" +
-        "</tr>"
+        "</tr>";
 
     return newRow;
 }
@@ -189,7 +189,8 @@ function AjaxPost(formdata) {
         url: "/api/Gallery/CreateNewGallery/",
         data: form_Data, 
         success: function (result) {
-            alert(result);
+            alert("Gallery created Successfully");
+            console.log(result);
            // window.location.href= "/Home/Index"
         }
     }
@@ -206,7 +207,7 @@ function AjaxPost(formdata) {
 //*********************************** Edit************************************
 
 function editgallery() {
-
+       
     var id = $("#selectImageGallery").val();
     $("#EditGalleryModal").modal('show'); 
     $("#EditGalleryModal .modal-title").html("Edit Gallery : " + id);
@@ -221,10 +222,10 @@ function editgallery() {
             $("#GalleryTitleEdit").val(data[0].gallery_Title);
 
             $("#EditGalleryTable tbody").remove(); 
-            $("EditGalleryTable").append("<tbody></tbody>");
+            $("#EditGalleryTable").append("<tbody></tbody>");
 
             $.each(data, function (key, value) {
-
+                console.log(value); 
                 $("#EditGalleryTable tbody").append(BuildEditRow(value));
             });
         }
@@ -236,92 +237,57 @@ function editgallery() {
 function BuildEditRow(value) {
 
     console.log(value.image_Description);
+    console.log(value.image_Description);
 
-         var newEditRow =
+    var newEditRow =
+
         "<tr>" +
-        "<td>" +
-        "<div class=''>" +
-        "<input name='Image_Id[]' hidden class='form-control col-xs-3' value='" + value.image_Id + "' " +
-        "/ > " +
-        "<img name='photo[]' style='border:1px solid' width='100' height='50' class='image-tag' src= '" + value.image_Path + "' " +
-        "/ > " +
-        "</div>" +
-        "</td>" +
-        "<td>" +
-        "<div class=''>" +
-        "<input name='ImageCaption[]' class='form-control col-xs-3' value='" + value.image_Caption + "' placeholder='Enter Image Caption' " +
-        "/ > " +
-        "</div>" +
-        "</td>" +
-        "<td>" +
-        "<div class=''>" +
-        "<textarea name='Description[]' class='form-control col-xs-3'  placeholder='Enter Image Description'>" + value.image_Description + " " +
-        "</textarea > " +
-        "</div>" +
-        "</td>" +
-        "<td>" +
-        "<div class=''>" +
-        "<input name='AltText[]' class='form-control col-xs-3' value='" + value.image_AltText + "' placeholder='Enter Alt Text' " +
-        "/ > " +
-        "</div>" +
-        "</td>" +
-        "<td>" +
-        "<div class='btn-group' role='group' aria-label='Perform Actions'>" +
-        "<input type='file' name='File[]' style='display:none' onchange='previewImg(this)' " +
-        "/>" +
-        "<button type='button' name='Upload' class='btn btn-success btn-sm' onclick='openFileExplorer(this)' " +
-        ">" +
-        "<span>" +
-        "<i class='fa fa-upload'>" +
-        "</i>" +
-        "</span>" +
-        "</button>" +
-        "</div>" +
-        "</td>" +
-        "</tr>"; 
-
-        //"<tr>" +
-        //    "<td>" +
-        //    "<div class=''>" +
-        //    "<input name='Image_Id[]' hidden class='form-control col-xs-3' value='" + value.image_Id + "' " +
-        //    "/ > " +
-        //    "<img name='photo[]' style='border:1px solid' width='100' height='50' class='image-tag' src= '" + value.image_Path + "' " +
-        //    "/ > " +
-        //    "</div>" +
-        //    "</td>" +
-        //    "<td>" +
-        //    "<div class=''>" +
-        //    "<input name='ImageCaption[]' class='form-control col-xs-3' value='" + value.image_Caption + "' placeholder='Enter Image Caption' " +
-        //    "/ > " +
-        //    "</div>" +
-        //    "</td>" +
-        //    "<td>" +
-        //    "<div class=''>" +
-        //    "<textarea name='Description[]' class='form-control col-xs-3'  placeholder='Enter Image Description'>" + value.image_Description + " " +
-        //    "</textarea > " +
-        //    "</div>" +
-        //    "</td>" +
-        //    "<td>" +
-        //    "<div class=''>" +
-        //    "<input name='AltText[]' class='form-control col-xs-3' value='" + value.image_AltText + "' placeholder='Enter Alt Text' " +
-        //    "/ > " +
-        //    "</div>" +
-        //    "</td>" +
-        //    "<td>" +
-        //    "<div class='btn-group' role='group' aria-label='Perform Actions'>" +
-        //    "<input type='file' name='File[]' style='display:none' onchange='previewImg(this)' " +
-        //    "/>" +
-        //    "<button type='button' name='Upload' class='btn btn-success btn-sm' onclick='openFileExplorer(this)' " +
-        //    ">" +
-        //    "<span>" +
-        //    "<i class='fa fa-upload'>" +
-        //    "</i>" +
-        //    "</span>" +
-        //    "</button>" +
-        //    "</div>" +
-        //    "</td>" +   
-
-        //"</tr>";
+            "<td>" +
+            "<div class=''>" +
+            "<input name='Image_Id[]' hidden class='form-control col-xs-3' value='" + value.image_Id + "' " +
+            "/ > " +
+            "<img name='photo[]' style='border:1px solid' width='100' height='50' class='image-tag' src= '" + value.image_Path + "' " +
+            "/ > " +
+            "</div>" +
+            "</td>" +
+            "<td>" +
+            "<div class=''>" +
+            "<input name='ImageTitle[]' class='form-control col-xs-3' value='" + value.image_Title +"' placeholder='Title' " +
+            "/ > " +
+            "</div>" +
+            "</td>" +
+            "<td>" +
+            "<div class=''>" +
+            "<input name='ImageCaption[]' class='form-control col-xs-3' value='" + value.image_Caption + "' placeholder='Enter Image Caption' " +
+            "/ > " +
+            "</div>" +
+            "</td>" +
+            "<td>" +
+            "<div class=''>" +
+            "<textarea name='Description[]' class='form-control col-xs-3'  placeholder='Enter Image Description'>" + value.image_Description + " " +
+            "</textarea > " +
+            "</div>" +
+            "</td>" +
+            "<td>" +
+            "<div class=''>" +
+            "<input name='AltText[]' class='form-control col-xs-3' value='" + value.image_AltText + "' placeholder='Enter Alt Text' " +
+            "/ > " +
+            "</div>" +
+            "</td>" +
+            "<td>" +
+            "<div class='btn-group' role='group' aria-label='Perform Actions'>" +
+            "<input type='file' name='File[]' style='display:none' onchange='previewImg(this)' " +
+            "/>" +
+            "<button type='button' name='Upload' class='btn btn-success btn-sm' onclick='openFileExplorer(this)' " +
+            ">" +
+            "<span>" +
+            "<i class='fa fa-upload'>" +
+            "</i>" +
+            "</span>" +
+            "</button>" +
+            "</div>" +
+            "</td>" +   
+        "</tr>";
 
     console.log(newEditRow); 
     return newEditRow; 
@@ -399,41 +365,146 @@ function loadSlider(val) {
     });
 }
 
-//function loadSlider(val) {
+//Open the file explorer
+
+function openFileExplorer(item) {
+
+    $(item).closest("tr").find("input[type='file']").trigger('click');
+}
+
+
+// Preview the upload image  
+
+function previewImg(input) {
+
+    var parent_Element = $(input).closest("tr");
     
-//    var counter = 0; 
+    if (input.files && input.files[0]) {
 
-//    $.ajax({
+        var reader = new FileReader(); 
+        reader.onload = function (e) {
 
-//        type: 'GET',
-//        url: '/api/Gallery/GetImageGalleryById' + val, 
-//        dataType: 'json',
-//        success: function (data) {
+            $(parent_Element).find('img').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
 
-//            $("#previewCarousel").html("");
-//            $("#previewCarousel").append("<ol class='carousel-indicators'> </ol>");
-//            $("#previewCarousel").append("<div class='carousel-inner'> </div>");
-//            $("#previewCarousel").append("<a class='carousel-control-prev' href='#previewCarousel' role='button' data-slide='prev'>");
-//            $(".carousel-control-prev").append("<span class='carousel-control-prev-icon' aria-hidden='true'></span>"); 
-//            $(".carousel-control-prev").append("<span class='sr-only'>Previous</span>");
-//            $("#previewCarousel").append("<a class='carousel-control-next' href='#previewCarousel' role='button' data-slide='next'>");
-//            $(".carousel-control-next").append("<span class='carousel-control-next-icon' aria-hidden='true'></span>");
-//            $(".carousel-control-next").append("<span class='sr-only'>Next</span>");
-//            $.each(data, function (key, value) {
+// ***************** Update images in Gallery *************************************** 
 
-//                $(".carousel-indicators").append("<li data-target='#previewCarousel' data-slide-to='" + counter + "' class='" + (counter == 0 ? "slideIndicators active" : "slideIndicators") + "'></li>"); 
-//                $(".carousel-inner").append("<div class='" + (counter == 0 ? "carousel-item active" : "carousel-item") + "'>" +
-//                    "<img class='d-block w-100' src='" + value.image_Path +"' alt='" + value.image_AltText+"'/>" +
-//                    "<div class='carousel-caption d-none d-md-block'> " +
-//                    "<h5>" + value.image_Caption + "</h5>" +
-//                    "<p>" + value.image_Description + "</p>" +
-//                    " </div>" +
-//                    " </div>");
+var GalleryObjects = [];
 
-//                counter++;
-//                console.log(value); 
-//            });
-//        }
+GalleryObjects[0] = []; // Will store all the image IDs
+GalleryObjects[1] = [];
+GalleryObjects[2] = []; // Will store all the image Captions
+GalleryObjects[3] = []; // Will store all the image Descriptions
+GalleryObjects[4] = []; // Will store all the image AltTexts
 
-//    });
-//}
+function AjaxUpdateGallery(formData) {
+
+    var form_Data = new FormData(formData); 
+
+    var ids = form_Data.getAll('Image_Id[]');
+    var title = form_Data.getAll('ImageTitle[]');
+    var captions = form_Data.getAll('ImageCaption[]'); 
+    var descriptions = form_Data.getAll('Description[]');
+    var altText = form_Data.getAll('AltText[]');
+
+    for (var counter = 0; counter < ids.length; counter++) {
+
+        GalleryObjects[0].push(ids[counter]);
+        GalleryObjects[1].push(title[counter]);
+        GalleryObjects[2].push(captions[counter]);
+        GalleryObjects[3].push(descriptions[counter]);
+        GalleryObjects[4].push(altText[counter]);
+    }
+
+    for (var i = 0, imageId, imageTitle, imageCaption, imageDescription, imageAltText;
+        imageId = GalleryObjects[0][i],
+        imageTitle = GalleryObjects[1][i],
+        imageCaption = GalleryObjects[2][i],
+        imageDescription = GalleryObjects[3][i],
+        imageAltText = GalleryObjects[4][i];
+        i++) {
+
+            form_Data.append('imageId[]', imageId); 
+            form_Data.delete('Image_Id[]');
+
+            form_Data.append('imageTitle[]', imageTitle);
+            form_Data.delete('ImageTitle[]');
+
+            form_Data.append('imageCaption[]', imageCaption);
+            form_Data.delete('ImageCaption[]');
+
+            form_Data.append('description[]', imageDescription);
+            form_Data.delete('Description[]');
+
+            form_Data.append('altText[]', altText);
+            form_Data.delete('AltText[]');
+    }
+
+    var galleryId = $("#EditGalleryModal #galleryId").text(); 
+
+    console.log("GalleryId : " + galleryId); 
+    var ajaxOptions = {
+
+        type: 'PUT',
+        url: '/api/Gallery/UpdateGallery/' + galleryId,
+        data: form_Data,
+        success: function (result) {
+
+            alert("Gallery Updated Successfully");
+            window.location.href = "/Home/Index";
+        },
+        error: function () {
+            alert("Could not Update Gallery");
+        }
+    };
+
+    if ($(formData).attr('enctype') == "multipart/form-data") {
+
+        ajaxOptions["contentType"] = false;  
+        ajaxOptions["processData"] = false; 
+    }
+
+    $.ajax(ajaxOptions); 
+
+    return false; 
+}
+
+// ******************** delete image Gallery**********************************************
+
+function deletegallery() {
+
+    var id = $("#selectImageGallery").val();
+    $("#DeleteGalleryModal").modal('show');
+    $("#DeleteGalleryModal .modal-title").html("Delete Confirmation");
+    $("#DeleteGalleryModal .modal-body").html("Do you want to Delete " + "<strong class='text-danger'> <span id='toDeleteGallery'>" +id + "</span> </strong>" + "  Gallery ?");
+}
+
+
+
+         
+function confirmDeleteGallery()
+{
+
+    var idGallery = $("#toDeleteGallery").text();
+    var ajaxOptions = {};
+    ajaxOptions.type = "DELETE"; 
+    ajaxOptions.url = "/api/Gallery/DeleteGallery/" + idGallery;
+    ajaxOptions.dataType = "json";
+    ajaxOptions.success = function ()
+    {
+        $("#DeleteGalleryModal").modal('hide');
+
+        alert("Deleted Gallery");
+        loadGallerySelect();
+        //viewgallery();
+    };
+    ajaxOptions.error = function () {
+
+        alert("Coud not Delete Gallery")
+    };
+
+    $.ajax(ajaxOptions);
+}
