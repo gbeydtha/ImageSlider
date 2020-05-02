@@ -4,9 +4,9 @@
 }
 
 @section Styles
-{
-
-} 
+    {
+    <link href="~/lib/tabulator/css/tabulator_bootstrap4.min.css" rel="stylesheet" />
+}
 
 <div class="container-fluid">
 
@@ -177,7 +177,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="table-responsive-sm">
-                                        <table>
+                                        <table class="table">
                                             <tbody>
                                                 <tr>
                                                     <td style="width:15%">
@@ -213,98 +213,172 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="row">
                                 <div class="col">
                                     <div id="LoadGalleryTable" class="table table-bordered table-hover"></div>
                                 </div>
                             </div>
-
                         </div>
                         <!-- Actions Tab End-->
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- TABS End-->
+    <!--End TABS-->
+</div>
+<!--Modal Edit Gallery -->
+<div class="modal fade" id="EditGalleryModal" role="dialog" aria-labelledby="EditGalleryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
 
-    <!--Modal Edit Gallery -->
-    <div class="modal fade" id="EditGalleryModal" role="dialog" aria-labelledby="EditGalleryModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span hidden id="galleryId"></span>
+                <h5 class="modal-title" id="EditGalleryModalLabel"><i class="fa fa-clipboard-check"></i></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
 
+            <form id="EditGallery" method="post" enctype="multipart/form-data" onsubmit="return event.preventDefault(), AjaxUpdateGallery(this)">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-md-12"> Gallery Title</label>
+                        <input id="GalleryTitleEdit" name="GalleryTitleEdit" class="form-control" placeholder="Enter Title for Gallery" />
+                    </div>
+                    <div class="form-group" style="margin-bottom:10px; margin-top: 5px">
+                        <table id="EditGalleryTable" class="table table-bordered table-hover" style="margin:auto">
+                            <thead class="thead-dark text-center">
+                                <tr>
+                                    <th scope="col">Image</th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Caption</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Alt Text</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary">No</button>
+                    <button id="btnEditYes" class="btn btn-primary"> Save</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<!--Modal Delete Galler-->
+<div class="modal fade" id="DeleteGalleryModal" role="dialog" aria-labelledby="DeleteGalleryModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form>
             <div class="modal-content">
+
                 <div class="modal-header">
-                    <span hidden id="galleryId"></span>
+                    <h5 class="modal-title" id="DeleteGalleryModalLabel"><i class="fa fa-clipboard-check"></i></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button id="btnEditYes" class="btn btn-primary" onclick="confirmDeleteGallery()"> Yes </button>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+</div>
+<!--     Modal Gallery Preview Slider  -->
+<div class="modal fade" id="PreviewGalleryModalById" role="dialog" aria-labelledby="PreviewGalleryModalByIdLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div id="PreviewGalleryModalBody" class="carousel slide modal-body" data-ride="carousel"></div>
+        </div>
+    </div>
+</div>
+
+<!--     Modal Gallery Edit By ID -->
+<div class="modal fade" id="EditGalleryModalById" role="dialog" aria-labelledby="EditGalleryModalByIdLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+
+        <div class="modal-content">
+
+            <input hidden id="galleryById" name="galleryById" />
+            <form id="EditGalleryById" method="post" onsubmit="return event.preventDefault(), AjaxUpdateGalleryById(this)">
+
+                <div class="modal-header">
                     <h5 class="modal-title" id="EditGalleryModalLabel"><i class="fa fa-clipboard-check"></i></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+                <div class="modal-body">
 
-                <form id="EditGallery" method="post" enctype="multipart/form-data" onsubmit="return event.preventDefault(), AjaxUpdateGallery(this)">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label class="col-md-12"> Gallery Title</label>
-                            <input id="GalleryTitleEdit" name="GalleryTitleEdit" class="form-control" placeholder="Enter Title for Gallery" />
+                    <div class="form-row mt-2">
+                        <div class="col-md-9">
+                            <label class="col-sm-12">Gallery Title </label>
+                            <input id="GalleryTitleEditById" name="GalleryTitleEditById" class="form-control" placeholder="Enter the Gallery Title" />
                         </div>
-                        <div class="form-group" style="margin-bottom:10px; margin-top: 5px">
-                            <table id="EditGalleryTable" class="table table-bordered table-hover" style="margin:auto" >
-                                <thead class="thead-dark text-center">
-                                    <tr>
-                                        <th scope="col">Image</th>
-                                        <th scope="col">Title</th>
-                                        <th scope="col">Caption</th>
-                                        <th scope="col">Description</th>
-                                        <th scope="col">Alt Text</th>
-                                        <th scope="col">Action</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                        <div class="col-md-3">
+                            <label class="col-sm-12">Type </label>
+                            <input id="GalleryTypeEditById" name="GalleryTypeEditById" class="form-control" disabled />
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary">No</button>
-                        <button id="btnEditYes" class="btn btn-primary"> Save</button>
-                    </div>
-                </form>
 
-            </div>
-        </div>
-    </div>
-    
-
-    <!--Modal Delete Galler-->
-    <div class="modal fade" id="DeleteGalleryModal" role="dialog" aria-labelledby="DeleteGalleryModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document"> 
-            <form>
-                <div class="modal-content">
-                    
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="DeleteGalleryModalLabel"><i class="fa fa-clipboard-check"></i></h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                    <div class="form-row mt-4">
+                        <div class="col">
+                            <label> Date Created </label>
+                            <input type="text" id="datecreated" name="datecreated" class="form-control" disabled />
+                        </div>
+                        <div class="col">
+                            <label> Date Updated </label>
+                            <input type="text" id="dateupdated" name="dateupdated" class="form-control" disabled />
+                        </div>
+                        <div class="col">
+                            <label> Username </label>
+                            <input type="text" id="username" name="username" class="form-control" disabled />
+                        </div>
                     </div>
-                    <div class="modal-body">
 
+                    <div class="form-row mt-4">
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input id="featuredbyId" type="checkbox" class="form-check-input" name="isfeatured"> Featured
+                            </label>
+                        </div>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input id="activebyId" type="checkbox" class="form-check-input" name="isActive">Active
+                            </label>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                        <button id="btnEditYes" class="btn btn-primary" onclick="confirmDeleteGallery()"> Yes </button>
 
-                    </div>
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button id="btnEditByIdYes" class="btn btn-primary">Save</button>
+                </div>
+
             </form>
         </div>
     </div>
-
 </div>
 
+
 @section Scripts
-{
+    {
+    <script src="~/lib/tabulator/js/tabulator.min.js"></script>
     <script src="~/lib/custom/js/gallery.js"></script>
-    
+
 }
 

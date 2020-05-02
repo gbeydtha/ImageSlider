@@ -3,29 +3,34 @@ $(function () {
     console.log("gallery.js loaded ");
     loadGallerySelect();
 
+    viewgallery();
 });
 
 // Code for Tabulator Table
+// We will add the tabular code
 var table = new Tabulator("#LoadGalleryTable", {
-
-    height: 800px,
+    height: "800px",
     layout: "fitColumns",
     paginationSize: 20,
-    placeholder: "No dataset",
+    placeholder: "No Data Set",
     columns: [
         { title: "Id", field: "galleryId", sorter: "number", width: 10 },
         { title: "Title", field: "title", sorter: "string" },
         { title: "Active", field: "isActive", align: "center", formatter: "tickCross", sorter: "boolean" },
         { title: "Featured", field: "isFeatured", align: "center", formatter: "tickCross", sorter: "boolean" },
-        { title: "Created", field: "timeCreated", align: "center", sorter: "date", formatter: function (cell) {
-                var convertTime = new Date(cell.getValue()).toUTCString(); 
+        {
+            title: "Created", field: "timeCreated", sorter: "date", align: "center", formatter: function (cell) {
+                var convertTime = new Date(cell.getValue()).toUTCString();
                 return convertTime;
-        }},
-        { title: "Updated", field: "lastUpdated", align: "center",  sorter: "date", formatter: function (cell) {
-            var convertTime = new Date(cell.getValue()).toUTCString();
-            return convertTime;
-        }},
-        { title: "UserName", field: "username", sorter: "string", align: "center" },
+            }
+        },
+        {
+            title: "Updated", field: "lastUpdated", sorter: "date", align: "center", formatter: function (cell) {
+                var connvertTime = new Date(cell.getValue()).toUTCString();
+                return connvertTime;
+            }
+        },
+        { title: "Username", field: "username", sorter: "string", align: "center" },
         { title: "Type", field: "galleryType", sorter: "string", align: "center" },
         {
             title: "Actions", sortable: false, align: "center", formatter: function (cell) {
@@ -34,16 +39,383 @@ var table = new Tabulator("#LoadGalleryTable", {
                 var active = cell.getData().isActive;
                 var featured = cell.getData().isFeatured;
                 var created = cell.getData().timeCreated;
-                var lastupdated = cell.getData().lastUpdated;
+                var lastUpdated = cell.getData().lastUpdated;
                 var username = cell.getData().username;
                 var gallerytype = cell.getData().galleryType;
+                var newEditRow = "<div class='btn-group' role='group' aria-label='Perform Actions'>" +
+                    "<button type='button' name='preview' class='btn btn-success btn-sm' onclick='loadModalslider(this)' " +
+                    " data-editid='" + galId + "' " +
+                    ">" +
+                    "<span>" +
+                    "<i class='fa fa-eye'>" +
+                    "</i>" +
+                    "</span>" +
+                    "</button>" +
+                    "<button type='button' name='Edit'  class='btn btn-primary btn-sm' onclick='editGalleryById(this)' " +
+                    " data-editid='" + galId + "' " +
+                    " data-title='" + galTitle + "' " +
+                    " data-active='" + active + "' " +
+                    " data-featured='" + featured + "' " +
+                    " data-created='" + created + "' " +
+                    " data-lastupdated='" + lastUpdated + "' " +
+                    " data-username='" + username + "' " +
+                    " data-gallerytype='" + gallerytype + "' " +
+                    ">" +
+                    "<span>" +
+                    "<i class='fa fa-edit'>" +
+                    "</i>" +
+                    "</span>" +
+                    "</button>" +
+                    "<button type='button' name='Delete' data-delid='" + galId + "'  class='btn btn-danger btn-sm' onclick='deleteGalleryById(this)' " +
+                    ">" +
+                    "<span>" +
+                    "<i class='fa fa-trash'>" +
+                    "</i>" +
+                    "</span>" +
+                    "</button>" +
+                    "</div>"
 
-            }},
+                return newEditRow;
+
+            }
+        }
     ]
-}); 
+});
 
-// required Properties 
+//var table = new Tabulator("#LoadGalleryTable", {
 
+//    height: "800px",
+//    layout: "fitColumns",
+//    paginationSize: 20,
+//    placeholder: "No dataset",
+//    columns: [
+//        { title: "Id", field: "galleryId", sorter: "number", width: 10 },
+//        { title: "Title", field: "title", sorter: "string" },
+//        { title: "Active", field: "isActive", align: "center", formatter: "tickCross", sorter: "boolean" },
+//        { title: "Featured", field: "isFeatured", align: "center", formatter: "tickCross", sorter: "boolean" },
+//        { title: "Created", field: "timeCreated", align: "center", sorter: "date", formatter: function (cell) {
+//                var convertTime = new Date(cell.getValue()).toUTCString(); 
+//                return convertTime;
+//        }},
+//        { title: "Updated", field: "lastUpdated", align: "center",  sorter: "date", formatter: function (cell) {
+//            var convertTime = new Date(cell.getValue()).toUTCString();
+//            return convertTime;
+//        }},
+//        { title: "UserName", field: "username", sorter: "string", align: "center" },
+//        { title: "Type", field: "galleryType", sorter: "string", align: "center" },
+//        { title: "Actions", sortable: false, align: "center", formatter: function (cell) {
+//                var galId = cell.getData().galleryId;
+//                var galTitle = cell.getData().title;
+//                var active = cell.getData().isActive;
+//                var featured = cell.getData().isFeatured;
+//                var created = cell.getData().timeCreated;
+//                var lastupdated = cell.getData().lastUpdated;
+//                var username = cell.getData().username;
+//            var gallerytype = cell.getData().galleryType;
+
+//            var newEditRow = "<div class='btn-group' role='group' aria-label='Perform Actions'>" + 
+//                "<button type='button' name='preview' class='btn btn-success btn-sm' onclick='loadModalSlider(this)' data-editid='" + galId + "' >" +
+//                "<span> <i class='fa fa-eye'>" +
+//                "</i>" +
+//                "</span>" +
+//                "</button>" +
+//                "<button type='button' name='Edit' class=' btn btn-primary btn-sm' onclick='editGalleryById(this)' " +
+//                "data-editid='" + galId+"' " +
+//                "data-title='" + galTitle +"' " +
+//                "data-active='" + active +"' " +
+//                "data-featured='" + featured +"' " +
+//                "data-created='" + created +"' " +
+//                "data-lastupdated='" +  lastupdated +"' " +
+//                "data-username='" + username + "' " +
+//                "data-gallerytype='" + gallerytype + "' " +
+//                ">" +
+//                "<span>" +
+//                "<i class='fa fa-edit'>" +
+//                "</i>" +
+//                "</span>" +
+//                "</button>" +
+//                "<button type='button' name='Delete' data-editid='" + galId + "' class='btn btn-danger btn-sm' onclick='deleteGalleryById(this)' > " +
+//                "<span>" +
+//                "<i class='fa fa-trash'>" +
+//                "</i>" +
+//                "</span>" +
+//                "</button>" +
+//                "</div>"
+
+//            return newEditRow; 
+//            }},
+//    ]
+//}); 
+
+// function to create modal carousel
+function loadModalslider(val) {
+    var editId = $(val).data('editid');
+
+    $("#PreviewGalleryModalBody").html("");
+    $("#PreviewGalleryModalById").modal('show');
+
+
+    var counter = 0;
+    $.ajax({
+        type: 'GET',
+        url: '/api/Gallery/GetImageGalleryById/' + editId,
+        dataType: 'json',
+        success: function (data) {
+            $('#PreviewGalleryModalBody').append("<ol class='carousel-indicators'></ol>");
+            $('#PreviewGalleryModalBody').append("<div class='carousel-inner'></div>");
+            $('#PreviewGalleryModalBody').append("<a class='carousel-control-prev' href='#PreviewGalleryModalBody' role='button' data-slide='prev'></a>");
+            $('.carousel-control-prev').append("<span class='carousel-control-prev-icon' aria-hidden='true'></span>");
+            $('.carousel-control-prev').append("<span class='sr-only'>Previous</span>");
+            $('#PreviewGalleryModalBody').append("<a class='carousel-control-next' href='#PreviewGalleryModalBody' role='button' data-slide='next'></a>");
+            $('.carousel-control-next').append("<span class='carousel-control-next-icon' aria-hidden='true'></span>");
+            $('.carousel-control-next').append("<span class='sr-only'>Next</span>");
+
+            $.each(data, function (key, value) {
+                $('.carousel-indicators').append("<li data-target='#PreviewGalleryModalBody' data-slide-to='" + counter + "'  class='" + (counter == 0 ? "slideIndicators active" : "slideIndicators") + "'></li>");
+                $('.carousel-inner').append("<div class='" + (counter == 0 ? "carousel-item active" : "carousel-item") + "'>" +
+                    "<img class='d-block w-100' alt='" + value.image_AltText + "' src='" + value.image_Path + "' />" +
+                    "<div class='carousel-caption d-none d-md-block'>" +
+                    "<h5>" + value.image_Caption + "</h5>" +
+                    "<p>" + value.image_Description + "</p>" +
+                    "</div>" +
+                    "</div>"
+                );
+                counter++;
+                console.log(value);
+            });
+
+
+        }
+    });
+
+}
+//function loadModalSlider(val) {
+
+//    var editId = $(val).data('editid');
+//    console.log(editId);
+//    $("#PreviewGalleryModalBody").html("");
+//    $("#PreviewGalleryModalBody").modal("show");
+
+//    var counter = 0; 
+//    $.ajax({
+
+//        type: 'GET',
+//        url: '/api/Gallery/GetImageGalleryById/' + editId,
+//        dataType: 'json',
+//        success: function (data) {
+
+//            $('#PreviewGalleryModalBody').append("<ol class='carousel-indicators'></ol>");
+//            $('#PreviewGalleryModalBody').append("<div class='carousel-inner'></div>");
+
+//            $('#PreviewGalleryModalBody').append("<a class='carousel-control-prev' href='#PreviewGalleryModalBody' role='button' data-slide='prev'></a>");
+//            $('.carousel-control-prev').append("<span class='carousel-control-prev-icon' aria-hidden='true'></span>");
+//            $('.carousel-control-prev').append("<span class='sr-only'>Previous</span>");
+
+//            $('#PreviewGalleryModalBody').append("<a class='carousel-control-next' href='#PreviewGalleryModalBody' role='button' data-slide='next'></a>");
+//            $('.carousel-control-next').append("<span class='carousel-control-next-icon' aria-hidden='true'></span>");
+//            $('.carousel-control-next').append("<span class='sr-only'>Next</span>");
+
+//            $.each(data, function (key, value) {
+
+//                $('.carousel-indicators').append("<li data-target='#PreviewGalleryModalBody' data-slide-to='" + counter + "'  class='" + (counter == 0 ? "slideIndicators active" : "slideIndicators") + "'></li>");
+//                $('.carousel-inner').append("<div class='" + (counter == 0 ? "carousel-item active" : "carousel-item") + "'>" +
+//                    "<img class='d-block w-100' alt='" + value.image_AltText + "' src='" + value.image_Path + "' />" +
+//                    "<div class='carousel-caption d-none d-md-block'>" +
+//                    "<h5>" + value.image_Caption + "</h5>" +
+//                    "<p>" + value.image_Description + "</p>" +
+//                    "</div>" +
+//                    "</div>"
+//                );
+//                counter++;
+//                console.log(value);
+
+//            });
+//        }
+//    });
+//}
+
+// method to Edit gallery - gallery level
+function editGalleryById(value) {
+    // Initialize values - so previous values are cleared
+    $("#featuredbyId").attr('checked', false);
+    $("#activebyId").attr('checked', false);
+
+    // Get all values from the row 
+    var editId = $(value).data('editid');
+    var title = $(value).data('title');
+    var active = $(value).data('active');
+    var featured = $(value).data('featured');
+    var lastUpdated = $(value).data('lastupdated');
+    var created = $(value).data('created');
+    var username = $(value).data('username');
+    var gallerytype = $(value).data('gallerytype');
+    console.log(active);
+
+    $("#EditGalleryModalById").modal('show');
+    $("#EditGalleryModalById .modal-title").html("Edit Gallery : " + editId);
+    $("#EditGalleryModalById #galleryById").text(editId);
+    $("#GalleryTitleEditById").val(title);
+    $("#datecreated").val(created);
+    $("#dateupdated").val(lastUpdated);
+    if (active) {
+        $('#activebyId').prop('checked', true);
+    }
+    else {
+        $("#activebyId").prop('checked', false);
+    }
+
+    if (featured) {
+        $("#featuredbyId").prop('checked', true);
+    }
+    else {
+        $("#featuredbyId").prop('checked', false);
+    }
+
+
+    $("#username").val(username);
+    $("#GalleryTypeEditById").val(gallerytype);
+}
+// Method to Edit the Gallery 
+//function editGalleryById(value) {
+
+//    $("#activebyId").attr('checked', false);
+//    $("#featuredId").attr('checked', false);
+
+//    // get all the values from the row.
+//    var editId = $(value).data('editid');
+//    var title = $(value).data('title');
+//    var active = $(value).data('active');
+//    var featured = $(value).data('featured');
+//    var lastupdated = $(value).data('lastupdated');
+//    var created = $(value).data('created');
+//    var username = $(value).data('username');
+//    var gallerytype = $(value).data('gallerytype');
+//    console.log(title); 
+
+//    $("#PreviewGalleryModalById").modal('show');
+//    $("#PreviewGalleryModalById .modal-title").html("Edit Gallery :") + editId; 
+//    $("#PreviewGalleryModalById #galleryById").text(editId); 
+//    $("#GalleryTitleEditById").val(title);
+//    $("#datecreated").val(created);
+//    $("#dateupdated").val(lastupdated);
+
+//    if (active) {
+//        $("#activebyid").prop('checked', true);
+//    }
+//    else {
+//        $("#activebyid").prop('checked', false);
+//    }
+
+//    if (featured) {
+//        $("#featuredbyId").prop('checked', true);
+//    }
+//    else {
+//        $("#featuredbyId").prop('checked', false);
+//    }
+
+//    $("#username").val(username);
+//    $("#GalleryTypeEditById").val(gallerytype);
+//}
+
+
+function AjaxUpdateGalleryById(formData) {
+    var form_Data = new FormData(formData);
+    var id = $('#EditGalleryModalById #galleryById').text();
+
+
+    var ajaxOptions =
+    {
+        type: 'PUT',
+        url: '/api/Gallery/UpdateGalleryById/' + id,
+        data: form_Data,
+        success: function (result) {
+            $('#EditGalleryModalById').modal('hide');
+            $('#EditGalleryModalById').trigger("reset");
+            loadGallerySelect();
+            viewgallery();
+
+
+
+            // alert("Gallery Updated Successfully");
+        },
+        error: function () {
+            alert("Could Not Update Gallery");
+        }
+    }
+
+    ajaxOptions["contentType"] = false;
+    ajaxOptions["processData"] = false;
+
+    $.ajax(ajaxOptions);
+
+    return false;
+
+}
+
+//function AjaxUpdateGalleryById(formData)
+//{
+//    var form_data = new formData(formData);
+//    var id = $("#EditGalleryModalById #galleryById").text(id);
+//    var ajaxOption = {
+
+//        type: 'PUT',
+//        url: '/api/Gallery/UpdateGalleryById/' + id,
+//        data: form_Data,
+//        success: function (result) {
+//            $("#EditGalleryModalById").modal('hide');
+//            $("#EditGalleryModalById").trigger("reset");
+//            loadGallerySelect();
+//            viewgallery(); 
+
+//            console.log('Galelry Edit success');
+//        },
+//        error: function () {
+//            alert("Could not update Gallery");
+//        }
+//    }
+//    ajaxOption["contentType"] = false;
+//    ajaxOption["processeData"] = false;
+
+//    $.ajax(ajaxOption);
+//    return false;
+//}
+
+
+function viewgallery() {
+
+    $.ajax({
+        type: 'GET',
+        url: '/api/Gallery/GetImageGallery/',
+        dataType: 'json',
+        success: function (data) {
+            var obj = JSON.stringify(data); 
+            table.setData(obj);
+        }
+    });
+}
+
+// Method to delete the Gallery
+
+function deleteGalleryById(value) {
+    var delId = $(value).data('delid');
+    
+    $("#DeleteGalleryModal").modal('show');
+    $("#DeleteGalleryModal .modal-title").html("Delete Confirmation");
+    $("#DeleteGalleryModal .modal-body").html("Do You Want To Delete " + "<strong class='text-danger'><span id='toDeleteGallery'>" + delId + "</span></strong>" + " Gallery ? ");
+
+}
+
+
+//function deleteGalleryById(value) {
+
+//    var delId = $(value).data('editid');
+//    $("#DeleteGalleryModal").modal('show');
+//    $("#DeleteGalleryModal .modal-title").html("Delete confirmation");
+//    $("#DeleteGalleryModal .modal-body").html("Do you want to Delete " + "<strong class='text-danger'> <span id='toDeleteGallery'>" + delId + "</span> </strong>" + "  Gallery ?");
+//}
+
+
+////////////////////////////// required Properties //////////////////////////////////////////
 // This array will contain all the objects received from the form submission
 var FormObjects = [];
 
@@ -237,6 +609,7 @@ function AjaxPost(formdata) {
     }
 
     $.ajax(ajaxOptions);
+    
     return false;
 }
 
@@ -376,12 +749,15 @@ function loadSlider(val) {
             $("#previewCarousel").html("");
             $('#previewCarousel').append("<ol class='carousel-indicators'></ol>");
             $('#previewCarousel').append("<div class='carousel-inner'></div>");
+
             $('#previewCarousel').append("<a class='carousel-control-prev' href='#previewCarousel' role='button' data-slide='prev'></a>");
             $('.carousel-control-prev').append("<span class='carousel-control-prev-icon' aria-hidden='true'></span>");
             $('.carousel-control-prev').append("<span class='sr-only'>Previous</span>");
+
             $('#previewCarousel').append("<a class='carousel-control-next' href='#previewCarousel' role='button' data-slide='next'></a>");
             $('.carousel-control-next').append("<span class='carousel-control-next-icon' aria-hidden='true'></span>");
             $('.carousel-control-next').append("<span class='sr-only'>Next</span>");
+
             $.each(data, function (key, value) {
                 $('.carousel-indicators').append("<li data-target='#previewCarousel' data-slide-to='" + counter + "'  class='" + (counter == 0 ? "slideIndicators active" : "slideIndicators") + "'></li>");
                 $('.carousel-inner').append("<div class='" + (counter == 0 ? "carousel-item active" : "carousel-item") + "'>" +
@@ -535,7 +911,7 @@ function confirmDeleteGallery()
 
         alert("Deleted Gallery");
         loadGallerySelect();
-        //viewgallery();
+        viewgallery();
     };
     ajaxOptions.error = function () {
 
@@ -544,3 +920,4 @@ function confirmDeleteGallery()
 
     $.ajax(ajaxOptions);
 }
+
