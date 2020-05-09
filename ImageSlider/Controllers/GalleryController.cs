@@ -30,24 +30,24 @@ namespace ImageSlider.Controllers
             var result = _dbContext.Galleries.ToList();
             return Ok(result.Select( g => new { g.GalleryId, g.Title, g.TimeCreated, g.LastUpdated, g.IsActive, g.IsFeatured, g.GalleryType, g.Username})); 
         }
-         
 
-        // get the featured galleries
-        [HttpGet("[action]/galleryType")]
-        public IActionResult GetFeaturedImageGallery([FromRoute] string galleryType)
+
+        // Get featured Gallery 
+        [HttpGet("[action]/{galleryType}")]
+        public IActionResult GetFeaturedGallery([FromRoute] string galleryType)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState); 
+                return BadRequest(ModelState);
             }
 
-            var result = from g in _dbContext.Galleries.Where(g=> g.IsFeatured== true && g.IsActive==true && g.GalleryType == galleryType)
-                         join i in _dbContext.GalleryImages on  g.GalleryId equals i.GalleryId
+            var result = from g in _dbContext.Galleries.Where(g => g.IsFeatured == true && g.GalleryType == galleryType && g.IsActive == true)
+                         join i in _dbContext.GalleryImages on g.GalleryId equals i.GalleryId
                          select new
                          {
                              Gallery_Id = g.GalleryId,
                              Gallery_Title = g.Title,
-                             Gallery_Path = g.GalleryUrl,
+                             Galelry_Path = g.GalleryUrl,
                              Gallery_Username = g.Username,
                              Gallery_Type = g.GalleryType,
                              Image_Id = i.ImageId,
@@ -58,8 +58,10 @@ namespace ImageSlider.Controllers
 
                          };
 
-            return Ok(result); 
+
+            return Ok(result);
         }
+ 
 
         //Get Gallery by Id
         [HttpGet("[action]/{Id}")]
@@ -400,7 +402,6 @@ namespace ImageSlider.Controllers
             using (var dbContextTransaction = _dbContext.Database.BeginTransaction())
             {
                 try
-
                 {
                     _dbContext.Entry(updateGallery).State = EntityState.Modified;
                     await _dbContext.SaveChangesAsync();

@@ -2,8 +2,9 @@
 $(function () {
     console.log("gallery.js loaded ");
     loadGallerySelect();
-
     viewgallery();
+    $("#filter-field, #filter-type").change(updateFilter);
+    $("#filter-value").keyup(updateFilter); 
 });
 
 // Code for Tabulator Table
@@ -147,6 +148,36 @@ var table = new Tabulator("#LoadGalleryTable", {
 //    ]
 //}); 
 
+
+function updateFilter() {
+    var filter = $("#filter-field").val(); 
+    console.log(filter);
+    
+    if (filter == "function") {
+
+        $("#filter-type").prop("disabled", true);
+        $("#filter-value").prop("disabled", true);
+    }
+    else {
+
+        $("#filter-type").prop("disabled", false);
+        $("#filter-value").prop("disabled", false);
+    }
+
+    table.setFilter(filter, $("#filter-type").val(), $("#filter-value").val() );
+}
+
+//clear filter
+
+$("#filter-clear").click(function () {
+
+    $("#filter-field").val("");
+    $("#filter-type").val("=");
+    $("#filter-value").val("");
+
+    table.clearFilter();
+
+});
 // function to create modal carousel
 function loadModalslider(val) {
     var editId = $(val).data('editid');
